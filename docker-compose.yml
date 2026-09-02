@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: skillora-postgres
+    environment:
+      POSTGRES_DB: skillora
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - skillora_pgdata:/var/lib/postgresql/data
+
+volumes:
+  skillora_pgdata:

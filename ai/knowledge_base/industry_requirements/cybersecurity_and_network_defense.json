@@ -1,0 +1,17 @@
+{
+  "domain": "Cybersecurity & Network Defense",
+  "high_demand_skills": [
+    "Network Packet Analysis",
+    "SIEM Tools",
+    "Zero-Trust Architecture",
+    "Vulnerability Assessment",
+    "OWASP Top 10",
+    "Python Automation"
+  ],
+  "declining_skills": [
+    "Perimeter-only firewall assumptions",
+    "Unencrypted protocol administration"
+  ],
+  "academic_gap": "Students learn abstract cryptographic algorithms, but have zero exposure to live vulnerability scanners, penetration testing sandboxes, or industry SIEM log parsing.",
+  "recommendation_for_institutions": "Setup an ethical hacking and vulnerability defense cyber sandbox in collaboration with industry partners."
+}

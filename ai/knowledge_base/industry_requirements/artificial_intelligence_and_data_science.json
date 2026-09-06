@@ -1,0 +1,18 @@
+{
+  "domain": "Artificial Intelligence & Data Science",
+  "high_demand_skills": [
+    "Python",
+    "PyTorch",
+    "Vector Databases",
+    "Retrieval-Augmented Generation (RAG)",
+    "Data Preprocessing",
+    "SQL",
+    "LLM Fine-tuning"
+  ],
+  "declining_skills": [
+    "Rule-based expert systems",
+    "Purely theoretical machine learning"
+  ],
+  "academic_gap": "Curriculums emphasize outdated theoretical proofs rather than end-to-end pipeline implementation, vector retrieval, embeddings, and generative AI interfaces.",
+  "recommendation_for_institutions": "Upgrade Machine Learning syllabi to cover Transformers, Vector embeddings (ChromaDB/pgvector), and hands-on LLM application development."
+}

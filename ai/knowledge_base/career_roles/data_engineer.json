@@ -1,0 +1,23 @@
+{
+  "role_name": "Data Engineer",
+  "description": "Designs scalable ETL/ELT pipelines, distributed data warehouses, and streaming infrastructure to support analytics and ML teams.",
+  "core_skills": [
+    "Python",
+    "SQL",
+    "Apache Spark",
+    "Apache Kafka",
+    "Airflow",
+    "Snowflake",
+    "AWS S3",
+    "Data Warehousing"
+  ],
+  "soft_skills": [
+    "Systems Reliability Focus",
+    "Data Governance Awareness"
+  ],
+  "readiness_criteria": "Experience building end-to-end data ingestion pipelines, managing partitioned lakes, and optimizing query performance.",
+  "avg_starting_salary": "?8,50,000 - ?15,00,000 P.A.",
+  "recommended_certifications": [
+    "Databricks Certified Data Engineer Associate"
+  ]
+}

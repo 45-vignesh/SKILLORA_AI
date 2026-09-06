@@ -1,0 +1,13 @@
+{
+  "title": "CompTIA Security+",
+  "issuing_org": "CompTIA",
+  "skills_validated": [
+    "Cybersecurity",
+    "Networking",
+    "Threat Intelligence",
+    "Identity Management",
+    "Cryptography"
+  ],
+  "difficulty": "Intermediate",
+  "relevance": "Baseline DoD 8570 approved benchmark for cybersecurity analysts."
+}

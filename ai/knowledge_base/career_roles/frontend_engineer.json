@@ -1,0 +1,25 @@
+{
+  "role_name": "Frontend Engineer",
+  "description": "Creates responsive, accessible, and performant web interfaces using modern frameworks, component design systems, and state management.",
+  "core_skills": [
+    "JavaScript",
+    "TypeScript",
+    "React",
+    "Next.js",
+    "HTML5",
+    "CSS3",
+    "Tailwind CSS",
+    "Redux",
+    "Web Vitals"
+  ],
+  "soft_skills": [
+    "User Empathy",
+    "Visual Attention to Detail",
+    "Design Collaboration"
+  ],
+  "readiness_criteria": "Strong portfolio showcasing cross-browser compatibility, modern component hierarchy, animation, and accessible semantics.",
+  "avg_starting_salary": "?6,50,000 - ?12,00,000 P.A.",
+  "recommended_certifications": [
+    "Meta Front-End Specialization"
+  ]
+}

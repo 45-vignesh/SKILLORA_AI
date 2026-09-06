@@ -1,0 +1,14 @@
+{
+  "title": "TensorFlow Developer Certificate",
+  "issuing_org": "Google Cloud",
+  "skills_validated": [
+    "Python",
+    "TensorFlow",
+    "Deep Learning",
+    "Computer Vision",
+    "NLP",
+    "Model Evaluation"
+  ],
+  "difficulty": "Intermediate",
+  "relevance": "Proves hands-on machine learning engineering and deep neural network construction."
+}

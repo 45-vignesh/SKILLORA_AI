@@ -1,0 +1,14 @@
+{
+  "title": "CKA: Certified Kubernetes Administrator",
+  "issuing_org": "Cloud Native Computing Foundation (CNCF)",
+  "skills_validated": [
+    "Kubernetes",
+    "Docker",
+    "Linux",
+    "Networking",
+    "Container Security",
+    "Cluster Architecture"
+  ],
+  "difficulty": "Advanced",
+  "relevance": "Gold standard for DevOps and Cloud Native engineering positions."
+}

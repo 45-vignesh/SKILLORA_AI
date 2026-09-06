@@ -1,0 +1,35 @@
+import API from './api';
+
+export const studentService = {
+  getProfile: () => API.get('/students/me'),
+  updateProfile: (data) => API.put('/students/me', data),
+  getSkills: () => API.get('/students/skills'),
+  addSkill: (data) => API.post('/students/skills', data),
+  deleteSkill: (id) => API.delete(`/students/skills/${id}`),
+  getDailyChallenges: () => API.get('/students/daily-challenges'),
+  completeChallenge: (id) => API.post(`/students/daily-challenges/${id}/complete`),
+  getProjects: () => API.get('/students/projects'),
+  addProject: (data) => API.post('/students/projects', data),
+  getCertifications: () => API.get('/students/certifications'),
+  addCertification: (data) => API.post('/students/certifications', data),
+  uploadResume: (formData) => API.post('/resume/upload', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' }
+  }),
+  getMyResume: () => API.get('/resume/my-resume'),
+  getAssessmentQuestions: (category) => API.get(`/assessment/questions?category=${category || 'All'}`),
+  submitAssessment: (data) => API.post('/assessment/submit', data),
+  getAssessmentHistory: () => API.get('/assessment/history'),
+  getCourses: (level) => API.get(`/courses${level ? `?level=${level}` : ''}`),
+  getCourseDetail: (id) => API.get(`/courses/${id}`),
+  enrollCourse: (id) => API.post(`/courses/${id}/enroll`),
+  updateCourseProgress: (id, progress_percent) => API.put(`/courses/${id}/progress`, { progress_percent }),
+  getMyCourses: () => API.get('/courses/my-courses/enrolled'),
+  getInternships: () => API.get('/internships'),
+  getInternshipDetail: (id) => API.get(`/internships/${id}`),
+  applyInternship: (id) => API.post(`/internships/${id}/apply`),
+  getMyInternshipApplications: () => API.get('/internships/my-applications/list'),
+  getJobs: () => API.get('/jobs'),
+  getJobDetail: (id) => API.get(`/jobs/${id}`),
+  applyJob: (id) => API.post(`/jobs/${id}/apply`),
+  getMyJobApplications: () => API.get('/jobs/my-applications/list'),
+};

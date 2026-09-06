@@ -1,0 +1,26 @@
+{
+  "role_name": "DevOps Engineer",
+  "description": "Automates continuous integration and delivery pipelines, manages telemetry, infrastructure as code, and site reliability.",
+  "core_skills": [
+    "Linux",
+    "Bash",
+    "GitLab CI",
+    "GitHub Actions",
+    "Docker",
+    "Kubernetes",
+    "Ansible",
+    "Prometheus",
+    "Terraform"
+  ],
+  "soft_skills": [
+    "Root Cause Analysis",
+    "Cross-team Coordination",
+    "Fast Learning"
+  ],
+  "readiness_criteria": "Production experience in setting up automated deployment pipelines, monitoring dashboards, and disaster recovery plans.",
+  "avg_starting_salary": "?9,00,000 - ?15,00,000 P.A.",
+  "recommended_certifications": [
+    "HashiCorp Certified Terraform Associate",
+    "Docker Certified Associate"
+  ]
+}

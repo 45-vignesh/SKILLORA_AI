@@ -1,0 +1,25 @@
+{
+  "role_name": "Cloud Engineer",
+  "description": "Designs, deploys, monitors, and optimizes cloud computing infrastructure across AWS, Azure, or GCP.",
+  "core_skills": [
+    "Linux",
+    "Networking",
+    "AWS",
+    "Docker",
+    "Terraform",
+    "CI/CD",
+    "Kubernetes",
+    "Python"
+  ],
+  "soft_skills": [
+    "Incident Management",
+    "Problem Solving",
+    "Collaboration"
+  ],
+  "readiness_criteria": "Demonstrated hands-on experience with cloud VPC architecture, container orchestration, and IaC automation.",
+  "avg_starting_salary": "?8,50,000 - ?14,00,000 P.A.",
+  "recommended_certifications": [
+    "AWS Certified Solutions Architect Associate",
+    "CKA: Certified Kubernetes Administrator"
+  ]
+}

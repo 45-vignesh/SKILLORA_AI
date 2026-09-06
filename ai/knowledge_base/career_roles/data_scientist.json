@@ -1,0 +1,26 @@
+{
+  "role_name": "Data Scientist",
+  "description": "Transforms structured and unstructured enterprise data into predictive models, business intelligence insights, and automated decision engines.",
+  "core_skills": [
+    "Python",
+    "R",
+    "SQL",
+    "Pandas",
+    "NumPy",
+    "Statistics",
+    "Machine Learning",
+    "Tableau",
+    "PowerBI"
+  ],
+  "soft_skills": [
+    "Data Storytelling",
+    "Business Acumen",
+    "Curiosity"
+  ],
+  "readiness_criteria": "Strong grasp of hypothesis testing, regression/classification trees, statistical inference, and data visualization.",
+  "avg_starting_salary": "?8,00,000 - ?14,50,000 P.A.",
+  "recommended_certifications": [
+    "IBM Data Science Professional",
+    "Google Data Analytics Certificate"
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "domain": "Cloud Infrastructure & DevOps",
+  "high_demand_skills": [
+    "AWS",
+    "Docker",
+    "Kubernetes",
+    "Linux",
+    "Terraform",
+    "CI/CD",
+    "Microservices"
+  ],
+  "declining_skills": [
+    "Monolithic manual deployments",
+    "Bare-metal only administration"
+  ],
+  "academic_gap": "Colleges teach basic Linux commands, but lack practical multi-tier VPC configuration, Docker containerization, and automated GitHub Actions CI/CD workflows.",
+  "recommendation_for_institutions": "Introduce mandatory hands-on Cloud Computing lab courses with container orchestration and Infrastructure-as-Code assignments."
+}

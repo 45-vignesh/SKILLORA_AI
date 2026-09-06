@@ -1,0 +1,25 @@
+{
+  "role_name": "Cybersecurity Analyst",
+  "description": "Monitors enterprise networks, detects vulnerabilities, responds to cyber threats, and implements security compliance policies.",
+  "core_skills": [
+    "Networking",
+    "Linux",
+    "SIEM",
+    "Wireshark",
+    "Penetration Testing",
+    "Cryptography",
+    "Python",
+    "OWASP"
+  ],
+  "soft_skills": [
+    "Vigilance",
+    "Crisis Communication",
+    "Ethical Mindset"
+  ],
+  "readiness_criteria": "Practical lab experience in vulnerability scanning, threat intelligence reporting, and network traffic packet inspection.",
+  "avg_starting_salary": "?7,00,000 - ?12,50,000 P.A.",
+  "recommended_certifications": [
+    "CompTIA Security+",
+    "Certified Ethical Hacker (CEH)"
+  ]
+}

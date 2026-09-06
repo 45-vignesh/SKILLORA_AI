@@ -1,0 +1,25 @@
+{
+  "role_name": "AI/ML Engineer",
+  "description": "Architects machine learning pipelines, fine-tunes foundation models, and deploys scalable inference APIs and RAG systems.",
+  "core_skills": [
+    "Python",
+    "PyTorch",
+    "TensorFlow",
+    "Scikit-Learn",
+    "Vector Databases",
+    "LangChain",
+    "Data Preprocessing",
+    "Docker"
+  ],
+  "soft_skills": [
+    "Analytical Reasoning",
+    "Research Rigor",
+    "Ethics in AI"
+  ],
+  "readiness_criteria": "Deep understanding of feature engineering, model evaluation metrics, deep learning architectures, and API serving.",
+  "avg_starting_salary": "?10,00,000 - ?18,00,000 P.A.",
+  "recommended_certifications": [
+    "TensorFlow Developer Certificate",
+    "DeepLearning.AI Machine Learning Specialization"
+  ]
+}

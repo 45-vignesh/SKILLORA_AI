@@ -1,0 +1,14 @@
+{
+  "title": "AWS Certified Solutions Architect Associate",
+  "issuing_org": "Amazon Web Services",
+  "skills_validated": [
+    "AWS",
+    "Cloud Architecture",
+    "Networking",
+    "Security",
+    "Storage",
+    "High Availability"
+  ],
+  "difficulty": "Intermediate",
+  "relevance": "Highly valued by 85% of enterprise cloud recruiters for entry and mid-level roles."
+}

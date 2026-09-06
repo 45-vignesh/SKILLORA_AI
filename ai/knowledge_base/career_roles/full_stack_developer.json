@@ -1,0 +1,26 @@
+{
+  "role_name": "Full Stack Developer",
+  "description": "Develops end-to-end web applications covering user interfaces, REST/GraphQL APIs, database modeling, and serverless deployment.",
+  "core_skills": [
+    "JavaScript",
+    "TypeScript",
+    "React",
+    "Node.js",
+    "Express",
+    "SQL",
+    "MongoDB",
+    "REST APIs",
+    "Git"
+  ],
+  "soft_skills": [
+    "System Design Thinking",
+    "Team Communication",
+    "Agile Methodologies"
+  ],
+  "readiness_criteria": "Portfolio of full-stack projects featuring relational/NoSQL databases, authentication, responsive UI, and cloud hosting.",
+  "avg_starting_salary": "?7,50,000 - ?13,00,000 P.A.",
+  "recommended_certifications": [
+    "Meta Front-End Developer",
+    "Node.js Application Development"
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "domain": "Full Stack & Modern Web Engineering",
+  "high_demand_skills": [
+    "React",
+    "TypeScript",
+    "Node.js",
+    "PostgreSQL",
+    "REST APIs",
+    "Modern Component Design",
+    "State Management"
+  ],
+  "declining_skills": [
+    "Static PHP without frameworks",
+    "Pure jQuery without modern bundling"
+  ],
+  "academic_gap": "Academic labs continue to teach outdated legacy web stacks, leaving students unprepared for asynchronous state management, TypeScript, and modern component design systems.",
+  "recommendation_for_institutions": "Adopt modern JavaScript/TypeScript web engineering modules incorporating React, RESTful architectures, and cloud deployments."
+}

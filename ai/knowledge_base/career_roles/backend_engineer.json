@@ -1,0 +1,25 @@
+{
+  "role_name": "Backend Engineer",
+  "description": "Builds high-concurrency distributed services, relational database schemas, caching layers, and secure microservices.",
+  "core_skills": [
+    "Python",
+    "Java",
+    "Go",
+    "FastAPI",
+    "Spring Boot",
+    "PostgreSQL",
+    "Redis",
+    "Kafka",
+    "Docker"
+  ],
+  "soft_skills": [
+    "Architectural Tradeoff Evaluation",
+    "Code Review Quality"
+  ],
+  "readiness_criteria": "Demonstrated capability to write clean modular services with caching, database indexing, message queuing, and unit tests.",
+  "avg_starting_salary": "?8,00,000 - ?14,00,000 P.A.",
+  "recommended_certifications": [
+    "Oracle Certified Java Professional",
+    "AWS Certified Developer Associate"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "role_name": "QA Automation Engineer",
+  "description": "Builds automated end-to-end and integration test suites, performance benchmarks, and CI test pipelines for continuous release quality.",
+  "core_skills": [
+    "Selenium",
+    "Cypress",
+    "Playwright",
+    "Python",
+    "Java",
+    "Postman",
+    "JUnit",
+    "CI/CD",
+    "JMeter"
+  ],
+  "soft_skills": [
+    "Bug Precision",
+    "Test Planning",
+    "Constructive Feedback"
+  ],
+  "readiness_criteria": "Demonstrated skill in building maintainable test automation frameworks, API regression suites, and load testing runs.",
+  "avg_starting_salary": "?5,50,000 - ?10,00,000 P.A.",
+  "recommended_certifications": [
+    "ISTQB Certified Tester",
+    "Playwright Automation Specialization"
+  ]
+}

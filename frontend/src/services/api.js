@@ -1,34 +1,25 @@
 import axios from 'axios';
 
 const API = axios.create({
-  baseURL: '/api/v1',
-  headers: {
-    'Content-Type': 'application/json',
-  },
+  baseURL: '/api',
+  timeout: 10000,
 });
 
-// Intercept requests to add JWT token
-API.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token');
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
+API.interceptors.request.use(config => {
+  const token = localStorage.getItem('skillora_token');
+  if (token) config.headers.Authorization = `Bearer ${token}`;
   return config;
 });
 
-// Intercept responses for auth expiration
 API.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (error.response && error.response.status === 401) {
-      // Avoid infinite loop if already on login
-      if (!window.location.pathname.includes('/login')) {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        window.location.href = '/login';
-      }
+  res => res,
+  err => {
+    if (err.response?.status === 401) {
+      localStorage.removeItem('skillora_token');
+      localStorage.removeItem('skillora_user');
+      window.location.href = '/';
     }
-    return Promise.reject(error);
+    return Promise.reject(err);
   }
 );
 

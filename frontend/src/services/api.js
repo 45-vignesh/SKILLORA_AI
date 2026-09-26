@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const API = axios.create({
-  baseURL: '/api',
+  baseURL: '/api/v1',
   timeout: 10000,
 });
 
@@ -14,10 +14,11 @@ API.interceptors.request.use(config => {
 API.interceptors.response.use(
   res => res,
   err => {
-    if (err.response?.status === 401) {
+    // Only redirect on 401 if it's NOT the login endpoint itself
+    if (err.response?.status === 401 && !err.config?.url?.includes('/auth/login')) {
       localStorage.removeItem('skillora_token');
       localStorage.removeItem('skillora_user');
-      window.location.href = '/';
+      window.location.href = '/login';
     }
     return Promise.reject(err);
   }

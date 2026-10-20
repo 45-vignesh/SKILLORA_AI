@@ -103,25 +103,17 @@ function SidebarContent({ user, accent, navItems, location, navigate, setMobileO
         })}
       </nav>
 
-      {/* Demo Switcher */}
+      {/* Production Status */}
       <div className="p-3 border-t" style={{ borderColor: 'rgba(255,255,255,0.07)' }}>
-        <div className="text-[10px] font-bold mb-2 px-2 tracking-wider" style={{ color: '#3D4161' }}>ROLE SWITCHER</div>
-        {authService.demoAccounts.map(acc => (
-          <button key={acc.role}
-            onClick={async () => {
-              try { await authService.login(acc.email, 'password123'); } catch (e) { /* ignore */ }
-              window.location.href = acc.path;
-            }}
-            className="w-full text-left px-3 py-1.5 rounded-lg mb-0.5 text-[11px] transition-all duration-150 hover:bg-white/5"
-            style={{ 
-              color: user.email === acc.email ? accent : '#8A8FAD', 
-              fontWeight: user.email === acc.email ? 600 : 400,
-              background: user.email === acc.email ? 'rgba(255,255,255,0.04)' : 'transparent'
-            }}
-          >
-            {user.email === acc.email ? '● ' : '○ '}{acc.label}
-          </button>
-        ))}
+        <div className="rounded-xl p-2.5 border" style={{ background: 'rgba(255,255,255,0.02)', borderColor: 'rgba(255,255,255,0.06)' }}>
+          <div className="flex items-center gap-2 mb-1">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="text-[11px] font-semibold text-white">Database Connected</span>
+          </div>
+          <div className="text-[10px]" style={{ color: '#8A8FAD' }}>
+            Role: <span className="text-white font-medium">{user.role}</span>
+          </div>
+        </div>
       </div>
 
       {/* User + Logout */}

@@ -27,10 +27,28 @@ export default function ResumeAnalyzer() {
     const form = new FormData();
     form.append('file', f);
     try {
-      const res = await API.post('/students/resume', form, { headers: { 'Content-Type': 'multipart/form-data' } });
+      const res = await API.post('/resume/upload', form, { headers: { 'Content-Type': 'multipart/form-data' } });
       if (res.data) setResult(res.data);
     } catch (err) {
-      // Keep rich demo result on fallback
+      console.error('Resume upload error:', err);
+    } finally {
+      setAnalyzing(false);
+    }
+  };
+
+  const handleLoadSample = async () => {
+    setAnalyzing(true);
+    try {
+      const response = await fetch('/Skillora_Demo_Resume.pdf');
+      const blob = await response.blob();
+      const sampleFile = new File([blob], 'Skillora_Demo_Resume.pdf', { type: 'application/pdf' });
+      setFile(sampleFile);
+      const form = new FormData();
+      form.append('file', sampleFile);
+      const res = await API.post('/resume/upload', form, { headers: { 'Content-Type': 'multipart/form-data' } });
+      if (res.data) setResult(res.data);
+    } catch (err) {
+      console.error('Sample resume test error:', err);
     } finally {
       setAnalyzing(false);
     }
@@ -40,7 +58,7 @@ export default function ResumeAnalyzer() {
     <div className="space-y-6">
       <WorkflowBanner currentStep={0} completedSteps={[]} />
 
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-white tracking-tight" style={{ fontFamily: 'Fraunces, serif' }}>
             AI ATS Resume Parser & Analyzer
@@ -48,6 +66,24 @@ export default function ResumeAnalyzer() {
           <p className="text-xs" style={{ color: '#8A8FAD' }}>
             Extract industry-standard skills, evaluate keyword density, and compute ATS compliance
           </p>
+        </div>
+
+        <div className="flex items-center gap-2.5 flex-shrink-0">
+          <a
+            href="/Skillora_Demo_Resume.pdf"
+            download="Skillora_Demo_Resume.pdf"
+            className="px-3.5 py-2 rounded-xl text-xs font-semibold text-white border hover:bg-white/10 transition-colors inline-flex items-center gap-1.5"
+            style={{ background: 'rgba(255,255,255,0.04)', borderColor: 'rgba(255,255,255,0.1)' }}>
+            <FileText size={14} className="text-indigo-400" /> Download Sample Resume
+          </a>
+          <button
+            type="button"
+            onClick={handleLoadSample}
+            disabled={analyzing}
+            className="px-4 py-2 rounded-xl text-xs font-bold text-white shadow-lg transition-transform hover:scale-105 cursor-pointer inline-flex items-center gap-1.5"
+            style={{ background: '#4F46E5', boxShadow: '0 4px 14px rgba(79, 70, 229, 0.4)' }}>
+            <Sparkles size={13} /> {analyzing ? 'Analyzing...' : 'Test with Sample Resume'}
+          </button>
         </div>
       </div>
 

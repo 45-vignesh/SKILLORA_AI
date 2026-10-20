@@ -1,4 +1,4 @@
-﻿import os
+import os
 from pathlib import Path
 from pydantic_settings import BaseSettings
 
@@ -27,7 +27,7 @@ class Settings(BaseSettings):
     KNOWLEDGE_BASE_DIR: Path = ROOT_DIR / "ai" / "knowledge_base"
     
     class Config:
-        env_file = ".env"
+        env_file = (str(ROOT_DIR / ".env"), str(BASE_DIR / ".env"), ".env")
         extra = "ignore"
 
 settings = Settings()

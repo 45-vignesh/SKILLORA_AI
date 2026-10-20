@@ -2,6 +2,7 @@ import React from 'react';
 import { Briefcase, Users, CheckCircle2, TrendingUp, Plus, ArrowRight, MapPin, DollarSign } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import StatCard from '../../components/StatCard';
+import RoleLogo from '../../components/RoleLogo';
 
 export default function CompanyDashboard() {
   const navigate = useNavigate();
@@ -9,7 +10,7 @@ export default function CompanyDashboard() {
 
   return (
     <div className="space-y-6">
-      {/* Hero */}
+      {/* Hero with Custom Company Logo */}
       <div className="rounded-2xl p-6 relative overflow-hidden border"
         style={{ 
           background: 'linear-gradient(135deg, rgba(14, 165, 233, 0.22) 0%, rgba(37, 99, 235, 0.12) 100%)',
@@ -17,22 +18,25 @@ export default function CompanyDashboard() {
         }}>
         <div className="absolute inset-0 opacity-5"
           style={{ backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)', backgroundSize: '30px 30px' }} />
-        <div className="relative flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold mb-2"
-                 style={{ background: 'rgba(14, 165, 233, 0.25)', color: '#7DD3FC' }}>
-              Corporate Talent Hub • TechNova Systems
+        <div className="relative flex flex-col md:flex-row md:items-center justify-between gap-5">
+          <div className="flex items-start gap-4">
+            <RoleLogo role="INDUSTRY" size={56} className="ring-4 ring-sky-500/20 shadow-2xl mt-1" />
+            <div>
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold mb-2"
+                   style={{ background: 'rgba(14, 165, 233, 0.25)', color: '#7DD3FC' }}>
+                Corporate Talent Hub • TechNova Systems
+              </div>
+              <h1 className="text-2xl font-bold text-white mb-1" style={{ fontFamily: 'Fraunces, serif' }}>
+                Precision Campus Recruitment & AI Talent Pipeline
+              </h1>
+              <p className="text-sm max-w-xl" style={{ color: '#8A8FAD' }}>
+                You have 3 active campus openings receiving AI semantic candidate matches with 85%+ readiness.
+              </p>
             </div>
-            <h1 className="text-2xl font-bold text-white mb-1" style={{ fontFamily: 'Fraunces, serif' }}>
-              Precision Campus Recruitment & AI Talent Pipeline
-            </h1>
-            <p className="text-sm max-w-xl" style={{ color: '#8A8FAD' }}>
-              You have 3 active campus openings receiving AI semantic candidate matches with 85%+ readiness.
-            </p>
           </div>
           <button 
             onClick={() => navigate('/company/post-job')}
-            className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white shadow-lg transition-transform hover:scale-105 flex-shrink-0"
+            className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white shadow-lg transition-transform hover:scale-105 flex-shrink-0 cursor-pointer"
             style={{ background: accent, boxShadow: '0 4px 15px rgba(14, 165, 233, 0.4)' }}>
             <Plus size={16} /> Post New Opportunity
           </button>
@@ -52,7 +56,7 @@ export default function CompanyDashboard() {
            style={{ background: 'rgba(255, 255, 255, 0.04)', borderColor: 'rgba(255, 255, 255, 0.08)' }}>
         <div className="flex items-center justify-between">
           <div className="font-semibold text-white text-sm">Active Job Openings & Hiring Status</div>
-          <button onClick={() => navigate('/company/candidates')} className="text-xs font-medium flex items-center gap-1" style={{ color: accent }}>
+          <button onClick={() => navigate('/company/candidates')} className="text-xs font-medium flex items-center gap-1 cursor-pointer" style={{ color: accent }}>
             Search Talent Pool <ArrowRight size={12} />
           </button>
         </div>
@@ -78,7 +82,7 @@ export default function CompanyDashboard() {
               <div className="flex items-center gap-3">
                 <button 
                   onClick={() => navigate('/company/applications')}
-                  className="px-4 py-2 rounded-xl text-xs font-semibold text-white border hover:bg-white/10 transition-colors"
+                  className="px-4 py-2 rounded-xl text-xs font-semibold text-white border hover:bg-white/10 transition-colors cursor-pointer"
                   style={{ background: 'rgba(255,255,255,0.05)', borderColor: 'rgba(255,255,255,0.1)' }}>
                   View Pipeline
                 </button>

@@ -7,6 +7,7 @@ import {
   FlaskConical, Handshake, BarChart3, GraduationCap
 } from 'lucide-react';
 import { authService } from '../services/authService';
+import RoleLogo from './RoleLogo';
 
 const NAV = {
   STUDENT: [
@@ -59,11 +60,8 @@ function SidebarContent({ user, accent, navItems, location, navigate, setMobileO
     <div className="flex flex-col h-full select-none" style={{ background: '#0F1020' }}>
       {/* Brand */}
       <div className="p-5 border-b" style={{ borderColor: 'rgba(255,255,255,0.07)' }}>
-        <div className="flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-xl flex items-center justify-center shadow-lg" 
-               style={{ background: accent, boxShadow: `0 4px 14px ${accent}40` }}>
-            <Sparkles size={18} color="white" />
-          </div>
+        <div className="flex items-center gap-3">
+          <RoleLogo role={user.role} size={38} />
           <div>
             <div className="font-bold text-white text-sm leading-tight tracking-wide" style={{ fontFamily: 'Fraunces, serif' }}>
               SKILLORA AI

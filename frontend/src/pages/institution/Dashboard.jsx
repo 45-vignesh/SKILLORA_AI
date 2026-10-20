@@ -3,6 +3,7 @@ import { BarChart3, Users, Award, TrendingUp, ArrowRight, AlertTriangle, ShieldC
 import { useNavigate } from 'react-router-dom';
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
 import StatCard from '../../components/StatCard';
+import RoleLogo from '../../components/RoleLogo';
 
 const TREND_DATA = [
   { year: '2022', rate: 76 },
@@ -18,7 +19,7 @@ export default function InstitutionDashboard() {
 
   return (
     <div className="space-y-6">
-      {/* Hero */}
+      {/* Hero with Custom Institution Logo */}
       <div className="rounded-2xl p-6 relative overflow-hidden border"
         style={{ 
           background: 'linear-gradient(135deg, rgba(245, 158, 11, 0.22) 0%, rgba(217, 119, 6, 0.12) 100%)',
@@ -26,22 +27,25 @@ export default function InstitutionDashboard() {
         }}>
         <div className="absolute inset-0 opacity-5"
           style={{ backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)', backgroundSize: '30px 30px' }} />
-        <div className="relative flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold mb-2"
-                 style={{ background: 'rgba(245, 158, 11, 0.25)', color: '#FCD34D' }}>
-              Academic & Placement Analytics • NIT Bengaluru
+        <div className="relative flex flex-col md:flex-row md:items-center justify-between gap-5">
+          <div className="flex items-start gap-4">
+            <RoleLogo role="INSTITUTION" size={56} className="ring-4 ring-amber-500/20 shadow-2xl mt-1" />
+            <div>
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold mb-2"
+                   style={{ background: 'rgba(245, 158, 11, 0.25)', color: '#FCD34D' }}>
+                Academic & Placement Analytics • NIT Bengaluru
+              </div>
+              <h1 className="text-2xl font-bold text-white mb-1" style={{ fontFamily: 'Fraunces, serif' }}>
+                Institutional Placement & Curriculum Alignment Dashboard
+              </h1>
+              <p className="text-sm max-w-xl" style={{ color: '#8A8FAD' }}>
+                Track batch industry readiness, monitor recruiting drives, and detect curriculum deficits in real time.
+              </p>
             </div>
-            <h1 className="text-2xl font-bold text-white mb-1" style={{ fontFamily: 'Fraunces, serif' }}>
-              Institutional Placement & Curriculum Alignment Dashboard
-            </h1>
-            <p className="text-sm max-w-xl" style={{ color: '#8A8FAD' }}>
-              Track batch industry readiness, monitor recruiting drives, and detect curriculum deficits in real time.
-            </p>
           </div>
           <button 
             onClick={() => navigate('/institution/demand')}
-            className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white shadow-lg transition-transform hover:scale-105 flex-shrink-0"
+            className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white shadow-lg transition-transform hover:scale-105 flex-shrink-0 cursor-pointer"
             style={{ background: accent, boxShadow: '0 4px 15px rgba(245, 158, 11, 0.4)' }}>
             AI Curriculum Gap Engine <ArrowRight size={15} />
           </button>
@@ -80,7 +84,7 @@ export default function InstitutionDashboard() {
              style={{ background: 'rgba(255, 255, 255, 0.04)', borderColor: 'rgba(255, 255, 255, 0.08)' }}>
           <div className="flex items-center justify-between">
             <div className="font-semibold text-white text-sm">Department Placement Readiness</div>
-            <button onClick={() => navigate('/institution/students')} className="text-xs font-medium flex items-center gap-1" style={{ color: accent }}>
+            <button onClick={() => navigate('/institution/students')} className="text-xs font-medium flex items-center gap-1 cursor-pointer" style={{ color: accent }}>
               View Roster <ArrowRight size={12} />
             </button>
           </div>

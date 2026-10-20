@@ -3,6 +3,7 @@ import { FileText, TrendingUp, Briefcase, Award, Target, Zap, ArrowRight, CheckC
 import { useNavigate } from 'react-router-dom';
 import StatCard from '../../components/StatCard';
 import WorkflowBanner from '../../components/WorkflowBanner';
+import RoleLogo from '../../components/RoleLogo';
 import API from '../../services/api';
 
 export default function StudentDashboard() {
@@ -29,7 +30,7 @@ export default function StudentDashboard() {
     <div className="space-y-6">
       <WorkflowBanner currentStep={2} completedSteps={[0, 1]} />
 
-      {/* Hero Welcome Banner */}
+      {/* Hero Welcome Banner with Custom Student Logo */}
       <div className="rounded-2xl p-6 relative overflow-hidden border"
         style={{ 
           background: 'linear-gradient(135deg, rgba(79, 70, 229, 0.25) 0%, rgba(124, 58, 237, 0.15) 100%)',
@@ -37,22 +38,25 @@ export default function StudentDashboard() {
         }}>
         <div className="absolute inset-0 opacity-5"
           style={{ backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)', backgroundSize: '30px 30px' }} />
-        <div className="relative flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold mb-2"
-                 style={{ background: 'rgba(79, 70, 229, 0.25)', color: '#A5B4FC' }}>
-              <Sparkles size={12} /> Target Role: Full Stack Developer
+        <div className="relative flex flex-col md:flex-row md:items-center justify-between gap-5">
+          <div className="flex items-start gap-4">
+            <RoleLogo role="STUDENT" size={56} className="ring-4 ring-indigo-500/20 shadow-2xl mt-1" />
+            <div>
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold mb-2"
+                   style={{ background: 'rgba(79, 70, 229, 0.25)', color: '#A5B4FC' }}>
+                <Sparkles size={12} /> Target Role: Full Stack Developer
+              </div>
+              <h1 className="text-2xl font-bold text-white mb-1" style={{ fontFamily: 'Fraunces, serif' }}>
+                Accelerate Your Placement Readiness
+              </h1>
+              <p className="text-sm max-w-xl" style={{ color: '#8A8FAD' }}>
+                Your profile is matched with 24 live industry listings. Complete containerization modules to boost readiness to 90%+.
+              </p>
             </div>
-            <h1 className="text-2xl font-bold text-white mb-1" style={{ fontFamily: 'Fraunces, serif' }}>
-              Accelerate Your Placement Readiness
-            </h1>
-            <p className="text-sm max-w-xl" style={{ color: '#8A8FAD' }}>
-              Your profile is matched with 24 live industry listings. Complete containerization modules to boost readiness to 90%+.
-            </p>
           </div>
           <button 
             onClick={() => navigate('/student/skill-gap')}
-            className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white shadow-lg transition-transform hover:scale-105 flex-shrink-0"
+            className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white shadow-lg transition-transform hover:scale-105 flex-shrink-0 cursor-pointer"
             style={{ background: accent, boxShadow: '0 4px 15px rgba(79, 70, 229, 0.4)' }}>
             View Skill Gap <ArrowRight size={15} />
           </button>
@@ -77,7 +81,7 @@ export default function StudentDashboard() {
               <button 
                 key={a.label} 
                 onClick={() => navigate(a.path)}
-                className="rounded-2xl p-4 text-left border transition-all duration-200 hover:border-white/20 hover:scale-[1.02] group"
+                className="rounded-2xl p-4 text-left border transition-all duration-200 hover:border-white/20 hover:scale-[1.02] group cursor-pointer"
                 style={{ background: 'rgba(255, 255, 255, 0.04)', borderColor: 'rgba(255, 255, 255, 0.08)' }}>
                 <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-3"
                   style={{ background: `${a.color}20`, border: `1px solid ${a.color}35` }}>
@@ -100,7 +104,7 @@ export default function StudentDashboard() {
         <div className="rounded-2xl p-5 border" style={{ background: 'rgba(255, 255, 255, 0.04)', borderColor: 'rgba(255, 255, 255, 0.08)' }}>
           <div className="flex items-center justify-between mb-4">
             <div className="font-semibold text-white text-sm">Target Role Alignments</div>
-            <button onClick={() => navigate('/student/career')} className="text-xs font-medium flex items-center gap-1" style={{ color: accent }}>
+            <button onClick={() => navigate('/student/career')} className="text-xs font-medium flex items-center gap-1 cursor-pointer" style={{ color: accent }}>
               Explore All <ArrowRight size={12} />
             </button>
           </div>
@@ -129,7 +133,7 @@ export default function StudentDashboard() {
         <div className="rounded-2xl p-5 border" style={{ background: 'rgba(255, 255, 255, 0.04)', borderColor: 'rgba(255, 255, 255, 0.08)' }}>
           <div className="flex items-center justify-between mb-4">
             <div className="font-semibold text-white text-sm">Top Priority Learning Tasks</div>
-            <button onClick={() => navigate('/student/learning-path')} className="text-xs font-medium flex items-center gap-1" style={{ color: accent }}>
+            <button onClick={() => navigate('/student/learning-path')} className="text-xs font-medium flex items-center gap-1 cursor-pointer" style={{ color: accent }}>
               Full Roadmap <ArrowRight size={12} />
             </button>
           </div>

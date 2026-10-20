@@ -2,6 +2,7 @@ import React from 'react';
 import { GraduationCap, FlaskConical, Handshake, Award, Plus, ArrowRight, BookOpen, Calendar } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import StatCard from '../../components/StatCard';
+import RoleLogo from '../../components/RoleLogo';
 
 export default function AcademicianDashboard() {
   const navigate = useNavigate();
@@ -9,7 +10,7 @@ export default function AcademicianDashboard() {
 
   return (
     <div className="space-y-6">
-      {/* Hero */}
+      {/* Hero with Custom Academician Logo */}
       <div className="rounded-2xl p-6 relative overflow-hidden border"
         style={{ 
           background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.22) 0%, rgba(5, 150, 105, 0.12) 100%)',
@@ -17,22 +18,25 @@ export default function AcademicianDashboard() {
         }}>
         <div className="absolute inset-0 opacity-5"
           style={{ backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)', backgroundSize: '30px 30px' }} />
-        <div className="relative flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold mb-2"
-                 style={{ background: 'rgba(16, 185, 129, 0.25)', color: '#6EE7B7' }}>
-              Faculty Industrial Empowerment • Dr. Rajesh Sharma
+        <div className="relative flex flex-col md:flex-row md:items-center justify-between gap-5">
+          <div className="flex items-start gap-4">
+            <RoleLogo role="ACADEMICIAN" size={56} className="ring-4 ring-emerald-500/20 shadow-2xl mt-1" />
+            <div>
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold mb-2"
+                   style={{ background: 'rgba(16, 185, 129, 0.25)', color: '#6EE7B7' }}>
+                Faculty Industrial Empowerment • Dr. Rajesh Sharma
+              </div>
+              <h1 className="text-2xl font-bold text-white mb-1" style={{ fontFamily: 'Fraunces, serif' }}>
+                Academic Research & Corporate Sabbatical Hub
+              </h1>
+              <p className="text-sm max-w-xl" style={{ color: '#8A8FAD' }}>
+                Bridge classroom curriculum with frontier corporate tech through faculty sabbaticals and sponsored R&D grants.
+              </p>
             </div>
-            <h1 className="text-2xl font-bold text-white mb-1" style={{ fontFamily: 'Fraunces, serif' }}>
-              Academic Research & Corporate Sabbatical Hub
-            </h1>
-            <p className="text-sm max-w-xl" style={{ color: '#8A8FAD' }}>
-              Bridge classroom curriculum with frontier corporate tech through faculty sabbaticals and sponsored R&D grants.
-            </p>
           </div>
           <button 
             onClick={() => navigate('/academician/fdp')}
-            className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white shadow-lg transition-transform hover:scale-105 flex-shrink-0"
+            className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white shadow-lg transition-transform hover:scale-105 flex-shrink-0 cursor-pointer"
             style={{ background: accent, boxShadow: '0 4px 15px rgba(16, 185, 129, 0.4)' }}>
             Explore FDP Programs <ArrowRight size={15} />
           </button>
@@ -54,7 +58,7 @@ export default function AcademicianDashboard() {
              style={{ background: 'rgba(255, 255, 255, 0.04)', borderColor: 'rgba(255, 255, 255, 0.08)' }}>
           <div className="flex items-center justify-between">
             <div className="font-semibold text-white text-sm">Industrial Faculty Upskilling (FDP)</div>
-            <button onClick={() => navigate('/academician/fdp')} className="text-xs font-medium flex items-center gap-1" style={{ color: accent }}>
+            <button onClick={() => navigate('/academician/fdp')} className="text-xs font-medium flex items-center gap-1 cursor-pointer" style={{ color: accent }}>
               View All <ArrowRight size={12} />
             </button>
           </div>
@@ -83,7 +87,7 @@ export default function AcademicianDashboard() {
              style={{ background: 'rgba(255, 255, 255, 0.04)', borderColor: 'rgba(255, 255, 255, 0.08)' }}>
           <div className="flex items-center justify-between">
             <div className="font-semibold text-white text-sm">Joint Industry R&D Projects</div>
-            <button onClick={() => navigate('/academician/research')} className="text-xs font-medium flex items-center gap-1" style={{ color: accent }}>
+            <button onClick={() => navigate('/academician/research')} className="text-xs font-medium flex items-center gap-1 cursor-pointer" style={{ color: accent }}>
               All Projects <ArrowRight size={12} />
             </button>
           </div>

@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { Briefcase, Plus, CheckCircle2, ArrowRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { industryService } from '../../services/industryService';
 
 export default function PostJob() {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
   const [form, setForm] = useState({
     title: '',
@@ -18,7 +21,38 @@ export default function PostJob() {
     requirements: ''
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setSubmitting(true);
+    setError(null);
+    const reqSkills = form.skills.split(',').map(s => s.trim()).filter(Boolean);
+    try {
+      if (form.type === 'Internship') {
+        await industryService.createInternship({
+          title: form.title,
+          department: form.department,
+          location: form.location || 'Remote / Hybrid',
+          stipend: form.min_salary ? `${form.min_salary} - ${form.max_salary || form.min_salary}` : '₹25,000 / month',
+          required_skills: reqSkills,
+          description: form.description || 'Internship opportunity.',
+        });
+      } else {
+        await industryService.createJob({
+          title: form.title,
+          job_type: form.type,
+          location: form.location || 'Bengaluru, India',
+          salary_range: form.min_salary ? `${form.min_salary} - ${form.max_salary || form.min_salary}` : '₹8,00,000 - ₹14,00,000 P.A.',
+          required_skills: reqSkills,
+          description: form.description || 'Full-time engineering opportunity.',
+        });
+      }
+      setSuccess(true);
+    } catch (err) {
+      setError(err.isForbidden ? 'Access denied: Industry role required.' : (err.response?.data?.detail || 'Failed to publish listing.'));
+    } finally {
+      setSubmitting(false);
+    }
+    return;
     e.preventDefault();
     setSuccess(true);
   };
@@ -33,6 +67,12 @@ export default function PostJob() {
           AI semantic vector matching will automatically rank eligible student candidates upon publishing
         </p>
       </div>
+
+      {error && (
+        <div className="rounded-xl p-3 border border-rose-500/30 bg-rose-500/10 text-xs text-rose-300">
+          {error}
+        </div>
+      )}
 
       {!success ? (
         <form onSubmit={handleSubmit} className="rounded-2xl p-6 border space-y-6"

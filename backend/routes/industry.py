@@ -10,13 +10,13 @@ from backend.models.industry import (
     Interview, FacultyTraining
 )
 from backend.schemas import JobCreate, InternshipCreate, ApplicationStatusUpdate, InterviewCreate, FacultyTrainingCreate
-from backend.security import get_current_user
+from backend.security import get_current_user, require_roles
 from ai.rag.rag_pipeline import rag_pipeline
 
 router = APIRouter(prefix="/industry", tags=["Industry"])
 
 @router.get("/profile")
-def get_industry_profile(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+def get_industry_profile(current_user: User = Depends(require_roles(["INDUSTRY", "ADMIN"])), db: Session = Depends(get_db)):
     ind = db.query(Industry).filter(Industry.user_id == current_user.id).first()
     if not ind:
         ind = Industry(user_id=current_user.id, company_name=current_user.full_name, industry_type="Technology")
@@ -26,7 +26,7 @@ def get_industry_profile(current_user: User = Depends(get_current_user), db: Ses
     return ind
 
 @router.put("/profile")
-def update_industry_profile(payload: dict, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+def update_industry_profile(payload: dict, current_user: User = Depends(require_roles(["INDUSTRY", "ADMIN"])), db: Session = Depends(get_db)):
     ind = db.query(Industry).filter(Industry.user_id == current_user.id).first()
     for k, v in payload.items():
         if hasattr(ind, k):
@@ -35,7 +35,7 @@ def update_industry_profile(payload: dict, current_user: User = Depends(get_curr
     return {"message": "Company profile updated"}
 
 @router.post("/jobs")
-def create_job(req: JobCreate, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+def create_job(req: JobCreate, current_user: User = Depends(require_roles(["INDUSTRY", "ADMIN"])), db: Session = Depends(get_db)):
     ind = db.query(Industry).filter(Industry.user_id == current_user.id).first()
     job = Job(
         industry_id=ind.id if ind else 1,
@@ -57,7 +57,7 @@ def create_job(req: JobCreate, current_user: User = Depends(get_current_user), d
     return {"message": "Job posted and indexed to RAG knowledge base", "job_id": job.id}
 
 @router.get("/jobs")
-def list_industry_jobs(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+def list_industry_jobs(current_user: User = Depends(require_roles(["INDUSTRY", "ADMIN"])), db: Session = Depends(get_db)):
     ind = db.query(Industry).filter(Industry.user_id == current_user.id).first()
     query = db.query(Job)
     if ind:
@@ -79,7 +79,7 @@ def list_industry_jobs(current_user: User = Depends(get_current_user), db: Sessi
     return results
 
 @router.post("/internships")
-def create_internship(req: InternshipCreate, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+def create_internship(req: InternshipCreate, current_user: User = Depends(require_roles(["INDUSTRY", "ADMIN"])), db: Session = Depends(get_db)):
     ind = db.query(Industry).filter(Industry.user_id == current_user.id).first()
     internship = Internship(
         industry_id=ind.id if ind else 1,
@@ -102,7 +102,7 @@ def create_internship(req: InternshipCreate, current_user: User = Depends(get_cu
     return {"message": "Internship opportunity posted successfully", "internship_id": internship.id}
 
 @router.get("/internships")
-def list_industry_internships(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+def list_industry_internships(current_user: User = Depends(require_roles(["INDUSTRY", "ADMIN"])), db: Session = Depends(get_db)):
     ind = db.query(Industry).filter(Industry.user_id == current_user.id).first()
     query = db.query(Internship)
     if ind:
@@ -124,7 +124,7 @@ def list_industry_internships(current_user: User = Depends(get_current_user), db
     return results
 
 @router.get("/applications")
-def get_all_applications(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+def get_all_applications(current_user: User = Depends(require_roles(["INDUSTRY", "ADMIN"])), db: Session = Depends(get_db)):
     ind = db.query(Industry).filter(Industry.user_id == current_user.id).first()
     industry_id = ind.id if ind else 1
     job_apps = db.query(JobApplication).join(Job).filter(Job.industry_id == industry_id).all()
@@ -157,13 +157,18 @@ def get_all_applications(current_user: User = Depends(get_current_user), db: Ses
     return results
 
 @router.put("/applications/{app_id}/status")
-def update_application_status(app_id: int, req: ApplicationStatusUpdate, app_type: str = "Job", current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+def update_application_status(app_id: int, req: ApplicationStatusUpdate, app_type: str = "Job", current_user: User = Depends(require_roles(["INDUSTRY", "ADMIN"])), db: Session = Depends(get_db)):
     if app_type == "Job":
         app = db.query(JobApplication).filter(JobApplication.id == app_id).first()
     else:
         app = db.query(InternshipApplication).filter(InternshipApplication.id == app_id).first()
     if not app:
         raise HTTPException(status_code=404, detail="Application not found")
+    if current_user.role != "ADMIN":
+        ind = db.query(Industry).filter(Industry.user_id == current_user.id).first()
+        owner_id = app.job.industry_id if app_type == "Job" and app.job else (app.internship.industry_id if app_type != "Job" and app.internship else None)
+        if not ind or owner_id != ind.id:
+            raise HTTPException(status_code=403, detail="Not authorized to update this application")
     app.status = req.status
     if req.notes:
         app.notes = req.notes
@@ -171,7 +176,17 @@ def update_application_status(app_id: int, req: ApplicationStatusUpdate, app_typ
     return {"message": f"Application status updated to {req.status}"}
 
 @router.get("/students/search")
-def search_students(skill: str = None, department: str = None, min_readiness: float = 0.0, db: Session = Depends(get_db)):
+def search_students(skill: str = None, department: str = None, min_readiness: float = 0.0, current_user: User = Depends(require_roles(["INDUSTRY", "ADMIN"])), db: Session = Depends(get_db)):
+    applicant_ids = set()
+    if current_user.role != "ADMIN":
+        ind = db.query(Industry).filter(Industry.user_id == current_user.id).first()
+        if ind:
+            applicant_ids.update(
+                a.student_id for a in db.query(JobApplication).join(Job).filter(Job.industry_id == ind.id).all()
+            )
+            applicant_ids.update(
+                a.student_id for a in db.query(InternshipApplication).join(Internship).filter(Internship.industry_id == ind.id).all()
+            )
     students = db.query(Student).all()
     results = []
     for s in students:
@@ -185,7 +200,7 @@ def search_students(skill: str = None, department: str = None, min_readiness: fl
         results.append({
             "id": s.id,
             "full_name": s.user.full_name if s.user else "Student",
-            "email": s.user.email if s.user else "",
+            "email": (s.user.email if s.user else "") if (current_user.role == "ADMIN" or s.id in applicant_ids) else None,
             "institution_name": s.institution_name,
             "department": s.department,
             "year_of_study": s.year_of_study,
@@ -199,7 +214,15 @@ def search_students(skill: str = None, department: str = None, min_readiness: fl
     return sorted(results, key=lambda x: x["readiness_score"], reverse=True)
 
 @router.post("/interviews")
-def schedule_interview(req: InterviewCreate, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+def schedule_interview(req: InterviewCreate, current_user: User = Depends(require_roles(["INDUSTRY", "ADMIN"])), db: Session = Depends(get_db)):
+    if req.application_type == "Job":
+        app = db.query(JobApplication).filter(JobApplication.id == req.application_id).first()
+        if not app:
+            raise HTTPException(status_code=404, detail="Job application not found")
+        if current_user.role != "ADMIN":
+            ind = db.query(Industry).filter(Industry.user_id == current_user.id).first()
+            if not ind or not app.job or app.job.industry_id != ind.id:
+                raise HTTPException(status_code=403, detail="Not authorized to schedule interview for this application")
     interview = Interview(
         application_id=req.application_id,
         application_type=req.application_type,
@@ -217,12 +240,18 @@ def schedule_interview(req: InterviewCreate, current_user: User = Depends(get_cu
     return {"message": "Interview scheduled successfully", "interview_id": interview.id}
 
 @router.get("/interviews")
-def list_interviews(db: Session = Depends(get_db)):
-    interviews = db.query(Interview).all()
+def list_interviews(current_user: User = Depends(require_roles(["INDUSTRY", "ADMIN"])), db: Session = Depends(get_db)):
+    if current_user.role == "ADMIN":
+        interviews = db.query(Interview).all()
+    else:
+        ind = db.query(Industry).filter(Industry.user_id == current_user.id).first()
+        if not ind:
+            return []
+        interviews = db.query(Interview).join(JobApplication).join(Job).filter(Job.industry_id == ind.id).all()
     return [{"id": i.id, "application_id": i.application_id, "application_type": i.application_type, "scheduled_time": i.scheduled_time, "meeting_link": i.meeting_link, "interviewer": i.interviewer, "status": i.status, "feedback": i.feedback} for i in interviews]
 
 @router.get("/training")
-def list_trainings(db: Session = Depends(get_db)):
+def list_trainings(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     trainings = db.query(FacultyTraining).all()
     results = []
     for t in trainings:
@@ -243,7 +272,7 @@ def list_trainings(db: Session = Depends(get_db)):
     return results
 
 @router.post("/training")
-def create_training(req: FacultyTrainingCreate, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+def create_training(req: FacultyTrainingCreate, current_user: User = Depends(require_roles(["INDUSTRY", "ADMIN"])), db: Session = Depends(get_db)):
     ind = db.query(Industry).filter(Industry.user_id == current_user.id).first()
     training = FacultyTraining(
         industry_id=ind.id if ind else 1,

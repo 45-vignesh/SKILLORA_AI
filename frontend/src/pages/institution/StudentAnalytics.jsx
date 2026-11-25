@@ -1,20 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Users, Search, Download, CheckCircle2, AlertCircle } from 'lucide-react';
-
-const STUDENTS = [
-  { id: 1, name: 'Aarav Sharma', dept: 'CSE', year: 3, cgpa: '8.8', readiness: 94, skills: ['FastAPI', 'React', 'Docker'], status: 'Placement Ready' },
-  { id: 2, name: 'Neha Gupta', dept: 'AI & DS', year: 4, cgpa: '9.2', readiness: 91, skills: ['PyTorch', 'Vector DBs', 'Python'], status: 'Placed (Zoho)' },
-  { id: 3, name: 'Vikram Mehta', dept: 'IT', year: 3, cgpa: '8.2', readiness: 84, skills: ['React', 'Node.js', 'PostgreSQL'], status: 'Interviewing' },
-  { id: 4, name: 'Kavita Patel', dept: 'ECE', year: 4, cgpa: '7.9', readiness: 68, skills: ['C++', 'Embedded C', 'RTOS'], status: 'Upskilling Required' },
-  { id: 5, name: 'Aditya Sen', dept: 'CSE', year: 4, cgpa: '8.5', readiness: 87, skills: ['Python', 'Docker', 'AWS'], status: 'Placed (Infosys)' }
-];
+import { institutionService } from '../../services/institutionService';
 
 export default function StudentAnalytics() {
+  const [students, setStudents] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [query, setQuery] = useState('');
 
-  const filtered = STUDENTS.filter(s => 
-    s.name.toLowerCase().includes(query.toLowerCase()) ||
-    s.dept.toLowerCase().includes(query.toLowerCase())
+  useEffect(() => {
+    institutionService.getStudents()
+      .then(res => {
+        const rows = Array.isArray(res.data) ? res.data : [];
+        setStudents(rows.map(s => ({
+          id: s.id,
+          name: s.full_name,
+          dept: s.department,
+          year: s.year_of_study,
+          cgpa: s.cgpa,
+          readiness: s.readiness_score ?? 0,
+          skills: Array.isArray(s.top_skills) ? s.top_skills : [],
+          status: (s.readiness_score ?? 0) >= 80 ? 'Placement Ready' : (s.readiness_score ?? 0) >= 60 ? 'Interviewing' : 'Upskilling Required',
+        })));
+      })
+      .catch(err => {
+        setError(err.isForbidden ? 'Access denied: Institution role required.' : (err.response?.data?.detail || 'Failed to load student roster.'));
+      })
+      .finally(() => setLoading(false));
+  }, []);
+
+  const filtered = students.filter(s =>
+    (s.name || '').toLowerCase().includes(query.toLowerCase()) ||
+    (s.dept || '').toLowerCase().includes(query.toLowerCase())
   );
 
   return (
@@ -35,12 +52,18 @@ export default function StudentAnalytics() {
         </button>
       </div>
 
+      {error && (
+        <div className="rounded-xl p-3 border border-rose-500/30 bg-rose-500/10 text-xs text-rose-300">
+          {error}
+        </div>
+      )}
+
       {/* Search */}
       <div className="rounded-2xl p-4 border flex items-center gap-3"
            style={{ background: 'rgba(255, 255, 255, 0.04)', borderColor: 'rgba(255, 255, 255, 0.08)' }}>
         <Search size={18} style={{ color: '#8A8FAD' }} />
-        <input 
-          type="text" 
+        <input
+          type="text"
           value={query}
           onChange={e => setQuery(e.target.value)}
           placeholder="Filter students by name or department..."
@@ -64,28 +87,34 @@ export default function StudentAnalytics() {
               </tr>
             </thead>
             <tbody className="divide-y" style={{ borderColor: 'rgba(255,255,255,0.05)' }}>
-              {filtered.map(s => (
-                <tr key={s.id} className="hover:bg-white/5 transition-colors">
-                  <td className="p-4 font-bold text-white">{s.name}</td>
-                  <td className="p-4" style={{ color: '#8A8FAD' }}>{s.dept} • Year {s.year}</td>
-                  <td className="p-4 font-medium text-white">{s.cgpa}</td>
-                  <td className="p-4">
-                    <span className="font-bold text-emerald-400">{s.readiness}%</span>
-                  </td>
-                  <td className="p-4">
-                    <div className="flex flex-wrap gap-1">
-                      {s.skills.map(sk => (
-                        <span key={sk} className="px-2 py-0.5 rounded text-[10px] bg-white/5 text-white/80 border border-white/10">
-                          {sk}
-                        </span>
-                      ))}
-                    </div>
-                  </td>
-                  <td className="p-4">
-                    <span className="text-[11px] font-semibold text-amber-400">{s.status}</span>
-                  </td>
-                </tr>
-              ))}
+              {loading ? (
+                <tr><td colSpan={6} className="p-6 text-center text-slate-400">Loading institution student roster...</td></tr>
+              ) : filtered.length === 0 ? (
+                <tr><td colSpan={6} className="p-6 text-center text-slate-400">No students found for this institution.</td></tr>
+              ) : (
+                filtered.map(s => (
+                  <tr key={s.id} className="hover:bg-white/5 transition-colors">
+                    <td className="p-4 font-bold text-white">{s.name}</td>
+                    <td className="p-4" style={{ color: '#8A8FAD' }}>{s.dept} • Year {s.year}</td>
+                    <td className="p-4 font-medium text-white">{s.cgpa}</td>
+                    <td className="p-4">
+                      <span className="font-bold text-emerald-400">{s.readiness}%</span>
+                    </td>
+                    <td className="p-4">
+                      <div className="flex flex-wrap gap-1">
+                        {s.skills.map(sk => (
+                          <span key={sk} className="px-2 py-0.5 rounded text-[10px] bg-white/5 text-white/80 border border-white/10">
+                            {sk}
+                          </span>
+                        ))}
+                      </div>
+                    </td>
+                    <td className="p-4">
+                      <span className="text-[11px] font-semibold text-amber-400">{s.status}</span>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>

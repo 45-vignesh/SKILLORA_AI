@@ -1,6 +1,7 @@
 import API from './api';
 
 export const studentService = {
+  getDashboard: () => API.get('/students/dashboard'),
   getProfile: () => API.get('/students/me'),
   updateProfile: (data) => API.put('/students/me', data),
   getSkills: () => API.get('/students/skills'),

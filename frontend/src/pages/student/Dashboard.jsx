@@ -9,13 +9,14 @@ import API from '../../services/api';
 export default function StudentDashboard() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
   const accent = '#4F46E5';
 
   useEffect(() => {
     API.get('/students/dashboard')
       .then(r => setData(r.data))
-      .catch(() => {})
+      .catch(err => setError(err.isForbidden ? 'Access denied for current role.' : (err.response?.data?.detail || 'Unable to load dashboard metrics.')))
       .finally(() => setLoading(false));
   }, []);
 
@@ -83,12 +84,18 @@ export default function StudentDashboard() {
         </div>
       </div>
 
+      {error && (
+        <div className="rounded-xl p-3 border border-rose-500/30 bg-rose-500/10 text-xs text-rose-300">
+          {error}
+        </div>
+      )}
+
       {/* 4 KPI Stat Cards with White + Indigo Merge */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard label="Readiness Score" value={data?.readiness_score ? `${data.readiness_score}%` : '74%'} sub="Placement benchmark" icon={Target} accent="#6366F1" trend="+12% this month" />
-        <StatCard label="Verified Skills" value={data?.skills_count || 14} sub="Resume & quiz validated" icon={Zap} accent="#10B981" />
-        <StatCard label="AI Job Matches" value={data?.job_matches || 9} sub="High alignment jobs" icon={Briefcase} accent="#0EA5E9" />
-        <StatCard label="Active Applications" value={data?.applications || 4} sub="In hiring pipeline" icon={Award} accent="#F59E0B" />
+        <StatCard label="Readiness Score" value={loading ? '...' : `${data?.readiness_score ?? 0}%`} sub="Placement benchmark" icon={Target} accent="#6366F1" trend="+12% this month" />
+        <StatCard label="Verified Skills" value={loading ? '...' : (data?.skills_count ?? 0)} sub="Resume & quiz validated" icon={Zap} accent="#10B981" />
+        <StatCard label="AI Job Matches" value={loading ? '...' : (data?.job_matches ?? 0)} sub="High alignment jobs" icon={Briefcase} accent="#0EA5E9" />
+        <StatCard label="Active Applications" value={loading ? '...' : (data?.applications ?? 0)} sub="In hiring pipeline" icon={Award} accent="#F59E0B" />
       </div>
 
       {/* Quick Actions (White + Accent Glass Cards) */}

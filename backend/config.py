@@ -25,6 +25,19 @@ class Settings(BaseSettings):
     # Uploads & Knowledge base
     UPLOAD_DIR: Path = BASE_DIR / "uploads"
     KNOWLEDGE_BASE_DIR: Path = ROOT_DIR / "ai" / "knowledge_base"
+    MAX_RESUME_SIZE_BYTES: int = int(os.getenv("MAX_RESUME_SIZE_BYTES", str(5 * 1024 * 1024)))
+    ALLOWED_RESUME_EXTENSIONS: tuple = (".pdf",)
+    ALLOWED_RESUME_MIME_TYPES: tuple = ("application/pdf", "application/x-pdf")
+
+    # CORS Origins (comma-separated in env for production)
+    CORS_ORIGINS: str = os.getenv(
+        "CORS_ORIGINS",
+        "http://localhost:5173,http://127.0.0.1:5173,http://localhost:3000"
+    )
+
+    @property
+    def cors_origins_list(self) -> list[str]:
+        return [origin.strip() for origin in self.CORS_ORIGINS.split(",") if origin.strip()]
     
     class Config:
         env_file = (str(ROOT_DIR / ".env"), str(BASE_DIR / ".env"), ".env")

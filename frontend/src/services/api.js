@@ -19,6 +19,9 @@ API.interceptors.response.use(
       localStorage.removeItem('skillora_token');
       localStorage.removeItem('skillora_user');
       window.location.href = '/login';
+    } else if (err.response?.status === 403) {
+      // Preserve active session on 403 Forbidden; mark error for safe handling
+      err.isForbidden = true;
     }
     return Promise.reject(err);
   }

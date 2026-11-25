@@ -1,61 +1,56 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CheckCircle2, Clock, Award, ArrowRight, RotateCcw } from 'lucide-react';
 import WorkflowBanner from '../../components/WorkflowBanner';
-import API from '../../services/api';
-
-const QUESTIONS = [
-  {
-    id: 1,
-    skill: 'Python & FastAPI',
-    question: 'In FastAPI, which library provides the underlying ASGI asynchronous web framework?',
-    options: ['Starlette', 'Flask', 'Django Channels', 'Tornado'],
-    correct: 0
-  },
-  {
-    id: 2,
-    skill: 'Databases & ORM',
-    question: 'Which index type is best optimized for equality lookups in PostgreSQL?',
-    options: ['B-Tree', 'Hash Index', 'GIN', 'GiST'],
-    correct: 1
-  },
-  {
-    id: 3,
-    skill: 'Modern React',
-    question: 'What is the primary benefit of React 18 Transitions (startTransition)?',
-    options: ['Avoid memory leaks', 'Keep the UI responsive during heavy state updates', 'Speed up bundle compilation', 'Auto-memorize components'],
-    correct: 1
-  },
-  {
-    id: 4,
-    skill: 'Docker & DevOps',
-    question: 'Which Dockerfile instruction creates an image layer that caches installed dependencies?',
-    options: ['COPY package.json . && RUN npm install', 'CMD ["npm", "start"]', 'EXPOSE 3000', 'ENV NODE_ENV=production'],
-    correct: 0
-  }
-];
+import { studentService } from '../../services/studentService';
 
 export default function SkillAssessment() {
+  const [questions, setQuestions] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState(null);
   const [current, setCurrent] = useState(0);
   const [selected, setSelected] = useState({});
   const [submitted, setSubmitted] = useState(false);
   const [score, setScore] = useState(0);
+  const [ragFeedback, setRagFeedback] = useState(null);
+
+  useEffect(() => {
+    studentService.getAssessmentQuestions('All')
+      .then(res => {
+        const list = Array.isArray(res.data) ? res.data : [];
+        setQuestions(list);
+      })
+      .catch(err => {
+        setError(err.response?.data?.detail || 'Failed to load assessment questions from server.');
+      })
+      .finally(() => setLoading(false));
+  }, []);
+
+  const q = questions[current];
 
   const handleSelect = (idx) => {
-    setSelected({ ...selected, [current]: idx });
+    if (!q) return;
+    setSelected({ ...selected, [q.id]: idx });
   };
 
-  const handleSubmit = () => {
-    let correct = 0;
-    QUESTIONS.forEach((q, i) => {
-      if (selected[i] === q.correct) correct++;
-    });
-    const finalPct = Math.round((correct / QUESTIONS.length) * 100);
-    setScore(finalPct);
-    setSubmitted(true);
-    API.post('/assessment/submit', { answers: selected, score: finalPct }).catch(() => {});
+  const handleSubmit = async () => {
+    setSubmitting(true);
+    setError(null);
+    try {
+      const res = await studentService.submitAssessment({
+        title: 'Adaptive Technical Skill Assessment',
+        category: q?.category || 'Technical Skills',
+        answers: selected,
+      });
+      setScore(res.data?.percentage ?? 0);
+      setRagFeedback(res.data?.rag_feedback || null);
+      setSubmitted(true);
+    } catch (err) {
+      setError(err.response?.data?.detail || 'Failed to submit assessment. Please try again.');
+    } finally {
+      setSubmitting(false);
+    }
   };
-
-  const q = QUESTIONS[current];
 
   return (
     <div className="space-y-6">
@@ -76,29 +71,45 @@ export default function SkillAssessment() {
         </div>
       </div>
 
-      {!submitted ? (
+      {error && (
+        <div className="rounded-xl p-3 border border-rose-500/30 bg-rose-500/10 text-xs text-rose-300">
+          {error}
+        </div>
+      )}
+
+      {loading ? (
+        <div className="rounded-2xl p-8 border text-center text-sm text-slate-300"
+             style={{ background: 'rgba(255, 255, 255, 0.04)', borderColor: 'rgba(255, 255, 255, 0.08)' }}>
+          Loading assessment questions...
+        </div>
+      ) : questions.length === 0 ? (
+        <div className="rounded-2xl p-8 border text-center text-sm text-slate-300"
+             style={{ background: 'rgba(255, 255, 255, 0.04)', borderColor: 'rgba(255, 255, 255, 0.08)' }}>
+          No assessment questions available at this time.
+        </div>
+      ) : !submitted ? (
         <div className="rounded-2xl p-6 border space-y-6"
              style={{ background: 'rgba(255, 255, 255, 0.04)', borderColor: 'rgba(255, 255, 255, 0.08)' }}>
           {/* Question Step Indicator */}
           <div className="flex items-center justify-between text-xs" style={{ color: '#8A8FAD' }}>
-            <span>Question {current + 1} of {QUESTIONS.length}</span>
-            <span className="text-indigo-400 font-semibold">{q.skill}</span>
+            <span>Question {current + 1} of {questions.length}</span>
+            <span className="text-indigo-400 font-semibold">{q.skill_tested}</span>
           </div>
 
           <div className="w-full bg-white/10 rounded-full h-1.5 overflow-hidden">
             <div className="h-full bg-indigo-500 rounded-full transition-all duration-300"
-                 style={{ width: `${((current + 1) / QUESTIONS.length) * 100}%` }} />
+                 style={{ width: `${((current + 1) / questions.length) * 100}%` }} />
           </div>
 
           {/* Question Text */}
           <div className="text-lg font-semibold text-white py-2">
-            {q.question}
+            {q.question_text}
           </div>
 
           {/* Options */}
           <div className="space-y-3">
-            {q.options.map((opt, idx) => {
-              const isSelected = selected[current] === idx;
+            {(q.options || []).map((opt, idx) => {
+              const isSelected = selected[q.id] === idx;
               return (
                 <button
                   key={idx}
@@ -130,9 +141,9 @@ export default function SkillAssessment() {
               Previous
             </button>
 
-            {current < QUESTIONS.length - 1 ? (
+            {current < questions.length - 1 ? (
               <button
-                disabled={selected[current] === undefined}
+                disabled={selected[q.id] === undefined}
                 onClick={() => setCurrent(current + 1)}
                 className="px-5 py-2.5 rounded-xl text-xs font-semibold text-white disabled:opacity-30 flex items-center gap-1.5"
                 style={{ background: '#4F46E5' }}>
@@ -140,11 +151,11 @@ export default function SkillAssessment() {
               </button>
             ) : (
               <button
-                disabled={selected[current] === undefined}
+                disabled={selected[q.id] === undefined || submitting}
                 onClick={handleSubmit}
-                className="px-6 py-2.5 rounded-xl text-xs font-bold text-white shadow-lg flex items-center gap-1.5"
+                className="px-6 py-2.5 rounded-xl text-xs font-bold text-white shadow-lg flex items-center gap-1.5 disabled:opacity-50"
                 style={{ background: '#10B981', boxShadow: '0 4px 15px rgba(16, 185, 129, 0.3)' }}>
-                Submit Assessment <CheckCircle2 size={14} />
+                {submitting ? 'Submitting...' : 'Submit Assessment'} <CheckCircle2 size={14} />
               </button>
             )}
           </div>
@@ -160,11 +171,11 @@ export default function SkillAssessment() {
             Assessment Result: {score}%
           </h2>
           <p className="text-sm max-w-md mx-auto" style={{ color: '#8A8FAD' }}>
-            Your assessment benchmark has updated your student profile and adjusted your AI career gap roadmap.
+            {ragFeedback?.explanation || 'Your assessment benchmark has updated your student profile and adjusted your AI career gap roadmap.'}
           </p>
           <div className="pt-2">
             <button
-              onClick={() => { setSubmitted(false); setSelected({}); setCurrent(0); }}
+              onClick={() => { setSubmitted(false); setSelected({}); setCurrent(0); setRagFeedback(null); }}
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-semibold border text-white"
               style={{ background: 'rgba(255, 255, 255, 0.05)', borderColor: 'rgba(255, 255, 255, 0.1)' }}>
               <RotateCcw size={14} /> Retake Assessment

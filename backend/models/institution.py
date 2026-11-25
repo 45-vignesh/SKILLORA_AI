@@ -1,4 +1,4 @@
-﻿from datetime import datetime
+from datetime import datetime
 from sqlalchemy import Column, Integer, String, Text, Float, Boolean, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
 from backend.database.connection import Base
@@ -18,6 +18,8 @@ class Institution(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
 
     user = relationship("User", back_populates="institution_profile")
+    students = relationship("Student", back_populates="institution", passive_deletes=True)
+    academicians = relationship("Academician", back_populates="institution", passive_deletes=True)
     skill_analytics = relationship("StudentSkillAnalytics", back_populates="institution", cascade="all, delete-orphan")
     placement_analytics = relationship("PlacementAnalytics", back_populates="institution", cascade="all, delete-orphan")
     curriculum_feedbacks = relationship("CurriculumFeedback", back_populates="institution", cascade="all, delete-orphan")
@@ -26,7 +28,7 @@ class StudentSkillAnalytics(Base):
     __tablename__ = "student_skill_analytics"
 
     id = Column(Integer, primary_key=True, index=True)
-    institution_id = Column(Integer, ForeignKey("institutions.id", ondelete="CASCADE"), nullable=False)
+    institution_id = Column(Integer, ForeignKey("institutions.id", ondelete="CASCADE"), nullable=False, index=True)
     department = Column(String(100), nullable=False)
     batch_year = Column(Integer, default=2026)
     total_students = Column(Integer, default=120)
@@ -42,7 +44,7 @@ class PlacementAnalytics(Base):
     __tablename__ = "placement_analytics"
 
     id = Column(Integer, primary_key=True, index=True)
-    institution_id = Column(Integer, ForeignKey("institutions.id", ondelete="CASCADE"), nullable=False)
+    institution_id = Column(Integer, ForeignKey("institutions.id", ondelete="CASCADE"), nullable=False, index=True)
     academic_year = Column(String(20), default="2025-2026")
     total_eligible = Column(Integer, default=350)
     placed_count = Column(Integer, default=298)
@@ -59,7 +61,7 @@ class CurriculumFeedback(Base):
     __tablename__ = "curriculum_feedbacks"
 
     id = Column(Integer, primary_key=True, index=True)
-    institution_id = Column(Integer, ForeignKey("institutions.id", ondelete="CASCADE"), nullable=False)
+    institution_id = Column(Integer, ForeignKey("institutions.id", ondelete="CASCADE"), nullable=False, index=True)
     department = Column(String(100), nullable=False)
     target_domain = Column(String(100), nullable=False)
     rag_gap_analysis = Column(Text, nullable=False)  # JSON or text

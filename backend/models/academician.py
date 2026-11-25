@@ -1,4 +1,4 @@
-﻿from datetime import datetime
+from datetime import datetime
 from sqlalchemy import Column, Integer, String, Text, Float, Boolean, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
 from backend.database.connection import Base
@@ -8,6 +8,7 @@ class Academician(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), unique=True, nullable=False)
+    institution_id = Column(Integer, ForeignKey("institutions.id", ondelete="SET NULL"), nullable=True, index=True)
     faculty_name = Column(String(255), nullable=False)
     institution_name = Column(String(255), default="National Institute of Technology")
     department = Column(String(100), default="Computer Science & Engineering")
@@ -20,6 +21,7 @@ class Academician(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
 
     user = relationship("User", back_populates="academician_profile")
+    institution = relationship("Institution", back_populates="academicians")
     research_projects = relationship("ResearchProject", back_populates="academician", cascade="all, delete-orphan")
 
 class ResearchProject(Base):

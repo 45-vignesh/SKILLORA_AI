@@ -4,11 +4,33 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from backend.database.connection import get_db
 from backend.models.user import User
-from backend.models.student import Student, StudentSkill, Project, Certification, DailyChallenge
+from backend.models.student import Student, StudentSkill, Project, Certification, DailyChallenge, Resume
+from backend.models.industry import Job, Internship, JobApplication, InternshipApplication
 from backend.schemas import StudentProfileUpdate, SkillCreate
-from backend.security import get_current_user
+from backend.security import get_current_user, require_roles
 
 router = APIRouter(prefix="/students", tags=["Students"])
+
+@router.get("/dashboard")
+def get_student_dashboard(current_user: User = Depends(require_roles(["STUDENT", "ADMIN"])), db: Session = Depends(get_db)):
+    student = db.query(Student).filter(Student.user_id == current_user.id).first()
+    if not student:
+        raise HTTPException(status_code=404, detail="Student profile not found")
+    skills_count = db.query(StudentSkill).filter(StudentSkill.student_id == student.id).count()
+    job_apps = db.query(JobApplication).filter(JobApplication.student_id == student.id).count()
+    intern_apps = db.query(InternshipApplication).filter(InternshipApplication.student_id == student.id).count()
+    active_jobs = db.query(Job).filter(Job.is_active == True).count()
+    active_internships = db.query(Internship).filter(Internship.is_active == True).count()
+    has_resume = db.query(Resume).filter(Resume.student_id == student.id).count() > 0
+    return {
+        "readiness_score": student.readiness_score or 0.0,
+        "skills_count": skills_count,
+        "job_matches": active_jobs + active_internships,
+        "applications": job_apps + intern_apps,
+        "target_role": student.target_role or "Full Stack Developer",
+        "full_name": current_user.full_name,
+        "has_resume": has_resume,
+    }
 
 @router.get("/me")
 def get_my_profile(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
